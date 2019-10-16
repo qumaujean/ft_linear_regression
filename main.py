@@ -1,4 +1,5 @@
 from array import array
+import csv
 
 def predict_price(value, teta0, teta1):
     return teta1 * value + teta0
@@ -40,80 +41,36 @@ def update_tetas(teta0, teta1, current_cost, data_x,data_y):
     temp0, temp1 = derivate_terms(data_x, data_y, teta0, teta1)
     return temp0, temp1
 
-def main(data_x, data_y, teta0, teta1, iteration):
+def get_data_set():
+    with open('data.csv') as csv_file:
+        data_x = array('L', [])
+        data_y = array('L', [])
+        csv_reader = csv.reader(csv_file, delimiter=',')
+        first_line = True
+        for row in csv_reader:
+            if first_line == False:
+                data_x.append(int(row[0]))
+                data_y.append(int(row[1]))
+            else:
+                first_line = False
+    return data_x, data_y
+
+## data_x correspond to input -- data_y correspond to observations
+
+def main(teta0, teta1, iteration):
+    data_x, data_y = get_data_set()
+    print(data_x, data_y)
     normalized_data_x, normalized_data_y = normalize_data(data_x, data_y)
-    print(normalized_data_x)
-    print(normalized_data_y)
     cost = cost_function(data_x, normalized_data_y, teta0, teta1)
     i = 0
     while iteration != 0:
         cost = cost_function(normalized_data_x, normalized_data_y, teta0, teta1)
         teta0, teta1 = update_tetas(teta0, teta1, cost, normalized_data_x, normalized_data_y)
-        if cost < 0.0001:
+        if cost == 0:
             break
         i += 1
         print(i, ". Training... Actual cost is ", cost, "\n")
         iteration -= 1
     print(i, teta0, teta1)
 
-
-
-data_x = array('l', [240000,
-139800,
-150500,
-185530,
-176000,
-114800,
-166800,
-89000,
-144500,
-84000,
-82029,
-63060,
-74000,
-97500,
-67000,
-76025,
-48235,
-93000,
-60949,
-65674,
-54000,
-68500,
-22899,
-61789]
-)
-
-data_y = array('l', [3650,
-3800,
-4400,
-4450,
-5250,
-5350,
-5800,
-5990,
-5999,
-6200,
-6390,
-6390,
-6600,
-6800,
-6800,
-6900,
-6900,
-6990,
-7490,
-7555,
-7990,
-7990,
-7990,
-8290]
-)
-
-# train(data_x, data_y, -0.3, -0.0014, 0.1, 100)
-
-# data_x = array('l', [1, 2, 3])
-
-# data_y = array('l', [1, 2, 3])
-
-main(data_x, data_y, 0, 1, 100)
+main(0, 0, 100)
