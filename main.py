@@ -59,18 +59,21 @@ def get_data_set():
 
 def main(teta0, teta1, iteration):
     data_x, data_y = get_data_set()
-    print(data_x, data_y)
     normalized_data_x, normalized_data_y = normalize_data(data_x, data_y)
     cost = cost_function(data_x, normalized_data_y, teta0, teta1)
     i = 0
-    while iteration != 0:
-        cost = cost_function(normalized_data_x, normalized_data_y, teta0, teta1)
-        teta0, teta1 = update_tetas(teta0, teta1, cost, normalized_data_x, normalized_data_y)
-        if cost == 0:
-            break
-        i += 1
-        print(i, ". Training... Actual cost is ", cost, "\n")
-        iteration -= 1
-    print(i, teta0, teta1)
+    with open('results_file.csv', mode='w') as results_file:
+        results = csv.writer(results_file, delimiter=',', quoting=csv.QUOTE_NONNUMERIC)
+        print("Training model...")
+        results.writerow(['Cost', ' teta0',' teta1'])
+        while iteration != 0:
+            cost = cost_function(normalized_data_x, normalized_data_y, teta0, teta1)
+            teta0, teta1 = update_tetas(teta0, teta1, cost, normalized_data_x, normalized_data_y)
+            if cost == 0:
+                break
+            i += 1
+            iteration -= 1
+            results.writerow([cost, teta0, teta1])
+    print("Training complete.")
 
 main(0, 0, 100)
