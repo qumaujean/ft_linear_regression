@@ -30,7 +30,15 @@ def update_tetas(teta0, teta1, current_cost, data_x,data_y):
 
 def main(data_x, data_y, teta0, teta1):
     cost = cost_function(data_x, data_y, teta0, teta1)
-    teta0, teta1 = update_tetas(teta0, teta1, cost, data_x, data_y)
+    i = 0
+    while cost != 0:
+        cost = cost_function(data_x, data_y, teta0, teta1)
+        teta0, teta1 = update_tetas(teta0, teta1, cost, data_x, data_y)
+        if cost < 0.0001:
+            break
+        i += 1
+        print(i, ". Training... Actual cost is ", cost, "\n")
+    print(i, teta0, teta1)
 
 
 
@@ -92,4 +100,4 @@ data_x = array('l', [1, 2, 3])
 
 data_y = array('l', [1, 2, 3])
 
-main(data_x, data_y, 0, 0)
+main(data_x, data_y, 0, 1)
