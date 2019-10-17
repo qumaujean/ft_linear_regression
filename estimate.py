@@ -1,6 +1,8 @@
 from array import array
+import sys
 import csv
 import matplotlib.pyplot as plt
+from math import floor
 
 def normalize_data(data_x, data_y):
     new_x_set = array('f', [])
@@ -48,6 +50,28 @@ def get_minimize_cost_tetas():
                 first_line = False
     return teta0, teta1
 
+def display_data(input, res):
+    try:
+        if sys.argv[1] == "-v":
+            data_x, data_y = get_data_set()
+            xplot = []
+            yplot = []
+            xplot.append(input)
+            yplot.append(res)
+            for i in range(len(data_x)):
+                ret = main(data_x[i])
+                xplot.append(data_x[i])
+                yplot.append(ret)
+            plt.plot(data_x, data_y, 'ro', input, res, 'bo', xplot, yplot)
+            plt.xlabel('Mileages')
+            plt.ylabel('Prices')
+            plt.show()
+        else:
+            print("Ivalid option: usage: -v (visual)")
+    except:
+        exit(0)
+
+
 def main(input):
     teta0, teta1 = get_minimize_cost_tetas()
     data_x, data_y = get_data_set()
@@ -56,23 +80,17 @@ def main(input):
     ymin = min(data_y)
     ymax = max(data_y)
     normalized_input = (float(input) - min(data_x)) / (max(data_x) - min(data_x))
-    test1 = float(teta1) * float(normalized_input) + float(teta0)
-    test = test1 * (float(ymax) - float(ymin)) + (float)(ymin)
-    print(test)
-    return test
+    normalized_output = float(teta1) * float(normalized_input) + float(teta0)
+    denormalized_output = normalized_output * (float(ymax) - float(ymin)) + (float)(ymin)
+    return denormalized_output
 
-input = 20000
+try:
+    input = input("Enter a mileage : ")
+    input = int(input)
+except:
+    print("Invalid number")
+    exit(0)
+
 res = main(input)
-
-data_x, data_y = get_data_set()
-xline = []
-yline = []
-for i in range(len(data_x)):
-    ret = main(data_x[i])
-    xline.append(data_x[i])
-    yline.append(ret)
-plt.plot(data_x, data_y, 'ro', xline, yline)
-plt.xlabel('Mileages')
-plt.ylabel('Prices')
-plt.show()
-
+print(int(round(res)))
+display_data(input, res)

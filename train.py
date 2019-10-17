@@ -33,10 +33,7 @@ def normalize_data(data_x, data_y):
         normalized_y_data = (data_y[i] - min(data_y)) / (max(data_y) - min(data_y))
         new_x_set.append(normalized_x_data)
         new_y_set.append(normalized_y_data)
-    print(new_x_set, new_y_set)
     return new_x_set, new_y_set
-        
-
 
 def update_tetas(teta0, teta1, current_cost, data_x,data_y):
     temp0, temp1 = derivate_terms(data_x, data_y, teta0, teta1)
@@ -78,4 +75,4 @@ def main(teta0, teta1, iteration):
             results.writerow([cost, teta0, teta1])
     print("Training complete.")
 
-main(0, 0, 5000)
+main(0, 0, 1000)
