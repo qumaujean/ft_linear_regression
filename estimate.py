@@ -3,32 +3,7 @@ import sys
 import csv
 import matplotlib.pyplot as plt
 from math import floor
-
-def normalize_data(data_x, data_y):
-    new_x_set = array('f', [])
-    new_y_set = array('f', [])
-    for i in range(len(data_x)):
-        normalized_x_data = (data_x[i] - min(data_x)) / (max(data_x) - min(data_x))
-        normalized_y_data = (data_y[i] - min(data_y)) / (max(data_y) - min(data_y))
-        new_x_set.append(normalized_x_data)
-        new_y_set.append(normalized_y_data)
-    for i in range(len(data_x)):
-        print(data_x[i], new_x_set[i])
-    return new_x_set, new_y_set
-
-def get_data_set():
-    with open('data.csv') as csv_file:
-        data_x = array('f', [])
-        data_y = array('f', [])
-        csv_reader = csv.reader(csv_file, delimiter=',')
-        first_line = True
-        for row in csv_reader:
-            if first_line == False:
-                data_x.append(int(row[0]))
-                data_y.append(int(row[1]))
-            else:
-                first_line = False
-    return data_x, data_y
+from utils import normalize_data, get_data_set
 
 def get_minimize_cost_tetas():
     cost = None
@@ -92,5 +67,8 @@ except:
     exit(0)
 
 res = main(input)
-print(int(round(res)))
+if res < 0:
+    print('Estimated price : 0')
+    exit(0)
+print 'Estimated price : ', int(round(res))
 display_data(input, res)

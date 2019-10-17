@@ -1,5 +1,6 @@
 from array import array
 import csv
+from utils import normalize_data, get_data_set
 
 def predict_price(value, teta0, teta1):
     return teta1 * value + teta0
@@ -25,33 +26,9 @@ def derivate_terms(data_x, data_y, teta0, teta1):
     temp1 = teta1 - learning_rate * (y_cost / data_len)
     return temp0, temp1
 
-def normalize_data(data_x, data_y):
-    new_x_set = array('f', [])
-    new_y_set = array('f', [])
-    for i in range(len(data_x)):
-        normalized_x_data = (data_x[i] - min(data_x)) / (max(data_x) - min(data_x))
-        normalized_y_data = (data_y[i] - min(data_y)) / (max(data_y) - min(data_y))
-        new_x_set.append(normalized_x_data)
-        new_y_set.append(normalized_y_data)
-    return new_x_set, new_y_set
-
 def update_tetas(teta0, teta1, current_cost, data_x,data_y):
     temp0, temp1 = derivate_terms(data_x, data_y, teta0, teta1)
     return temp0, temp1
-
-def get_data_set():
-    with open('data.csv') as csv_file:
-        data_x = array('f', [])
-        data_y = array('f', [])
-        csv_reader = csv.reader(csv_file, delimiter=',')
-        first_line = True
-        for row in csv_reader:
-            if first_line == False:
-                data_x.append(float(row[0]))
-                data_y.append(float(row[1]))
-            else:
-                first_line = False
-    return data_x, data_y
 
 ## data_x correspond to input -- data_y correspond to observations
 
