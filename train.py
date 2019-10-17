@@ -14,7 +14,7 @@ def cost_function(data_x, data_y, teta0, teta1):
     return cost / (2 * data_len)
 
 def derivate_terms(data_x, data_y, teta0, teta1):
-    learning_rate = 0.25
+    learning_rate = 0.1
     data_len = len(data_x)
     x_cost = 0.0
     y_cost = 0.0
@@ -28,6 +28,8 @@ def derivate_terms(data_x, data_y, teta0, teta1):
 def normalize_data(data_x, data_y):
     new_x_set = []
     new_y_set = []
+    print("MAX", max(data_x))
+    print("MIN", min(data_x))
     for i in range(len(data_x)):
         normalized_x_data = (data_x[i] - min(data_x)) / (max(data_x) - min(data_x))
         normalized_y_data = (data_y[i] - min(data_y)) / (max(data_y) - min(data_y))
