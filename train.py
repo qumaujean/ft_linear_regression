@@ -14,7 +14,7 @@ def cost_function(data_x, data_y, teta0, teta1):
     return cost / (2 * data_len)
 
 def derivate_terms(data_x, data_y, teta0, teta1):
-    learning_rate = 0.1
+    learning_rate = 0.2
     data_len = len(data_x)
     x_cost = 0.0
     y_cost = 0.0
@@ -26,15 +26,14 @@ def derivate_terms(data_x, data_y, teta0, teta1):
     return temp0, temp1
 
 def normalize_data(data_x, data_y):
-    new_x_set = []
-    new_y_set = []
-    print("MAX", max(data_x))
-    print("MIN", min(data_x))
+    new_x_set = array('f', [])
+    new_y_set = array('f', [])
     for i in range(len(data_x)):
         normalized_x_data = (data_x[i] - min(data_x)) / (max(data_x) - min(data_x))
         normalized_y_data = (data_y[i] - min(data_y)) / (max(data_y) - min(data_y))
         new_x_set.append(normalized_x_data)
         new_y_set.append(normalized_y_data)
+    print(new_x_set, new_y_set)
     return new_x_set, new_y_set
         
 
@@ -45,14 +44,14 @@ def update_tetas(teta0, teta1, current_cost, data_x,data_y):
 
 def get_data_set():
     with open('data.csv') as csv_file:
-        data_x = array('L', [])
-        data_y = array('L', [])
+        data_x = array('f', [])
+        data_y = array('f', [])
         csv_reader = csv.reader(csv_file, delimiter=',')
         first_line = True
         for row in csv_reader:
             if first_line == False:
-                data_x.append(int(row[0]))
-                data_y.append(int(row[1]))
+                data_x.append(float(row[0]))
+                data_y.append(float(row[1]))
             else:
                 first_line = False
     return data_x, data_y
@@ -62,7 +61,8 @@ def get_data_set():
 def main(teta0, teta1, iteration):
     data_x, data_y = get_data_set()
     normalized_data_x, normalized_data_y = normalize_data(data_x, data_y)
-    cost = cost_function(data_x, normalized_data_y, teta0, teta1)
+    cost = cost_function(normalized_data_x, normalized_data_y, teta0, teta1)
+    teta_history = [[], []]
     i = 0
     with open('results_file.csv', mode='w') as results_file:
         results = csv.writer(results_file, delimiter=',', quoting=csv.QUOTE_NONNUMERIC)
@@ -78,4 +78,4 @@ def main(teta0, teta1, iteration):
             results.writerow([cost, teta0, teta1])
     print("Training complete.")
 
-main(0, 0, 100)
+main(0, 0, 5000)
