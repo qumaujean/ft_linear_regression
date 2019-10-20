@@ -7,23 +7,27 @@ from utils import normalize_data, get_data_set
 
 def get_minimize_cost_tetas():
     cost = None
-    with open('results_file.csv') as results_file:
-        csv_reader = csv.reader(results_file, delimiter=',')
-        first_line = True
-        for row in csv_reader:
-            if first_line == False:
-                if (cost == None):
-                    cost = row[0]
-                    teta0 = row[1]
-                    teta1 = row[2]
-                else:
-                    if abs(float(cost)) > abs(float(row[0])):
+    try:
+        with open('results_file.csv') as results_file:
+            csv_reader = csv.reader(results_file, delimiter=',')
+            first_line = True
+            for row in csv_reader:
+                if first_line == False:
+                    if (cost == None):
                         cost = row[0]
                         teta0 = row[1]
                         teta1 = row[2]
-            else:
-                first_line = False
-    return teta0, teta1
+                    else:
+                        if abs(float(cost)) > abs(float(row[0])):
+                            cost = row[0]
+                            teta0 = row[1]
+                            teta1 = row[2]
+                else:
+                    first_line = False
+        return teta0, teta1
+    except:
+        print("0")
+        exit(0)
 
 def display_data(input, res):
     try:
